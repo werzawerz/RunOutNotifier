@@ -1,0 +1,36 @@
+<resources>
+    <string name="app_name">RunOutNotifier</string>
+    <string name="title_item_detail">Item Detail</string>
+    <string name="addNewItem">New Item</string>
+    <string name="DeleteAll">Delete All</string>
+    <string name="searchForMarket">Search For Market</string>
+    <string name="settings">Settings</string>
+    <string name="exit">Exit</string>
+    <string name="title">Title</string>
+    <string name="duedate">DueDate</string>
+    <string name="type">Type</string>
+	<string name="ChangeQuantity">Change Quantity</string>
+    <string name="DueDateInfo">You are expected to run out in:</string>
+    <string name="ChangeDueTime">Change Due Time</string>
+    <string name="ItemName">Item Name:</string>
+    <string name="tvDueDate">Due Date</string>
+    <string name="ItemQuantitty">Quantity</string>
+    <string name="ItemType">Type</string>
+    <string name="btnOK">OK</string>
+    <string name="btnCancel">Cancel</string>
+	<string name="new_quantity">New quantity:</string>
+    <string name="a_number_please">A number please</string>
+	<string name="title_settings">Settings</string>
+	<string name="label_off">Off</string>
+    <string name="label_on">On</string>
+    <string name="enable_notifications">Receive notifications</string>
+    <string name="enable_locations">Enable app to acces locations</string>
+    <string name="menu_delete">Delete</string>
+    <string name="menu_hide">Hide</string>
+    <string name="ShowHidden">Show Hidden Items</string>
+    <string name="rebuy">Rebuy</string>
+    <string name="if_you_have_run_out_of_this_item_and_and_you_have_rebuyed_please_click_on_the_button_below">If you
+        have run out of this item, and and you have rebuyed, please click on the button below
+    </string>
+
+</resources>

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+			 android:layout_width="wrap_content"
+			 android:layout_height="wrap_content">
+
+	<TableRow>
+		<TextView
+			android:layout_width="wrap_content"
+			android:text = "@string/new_quantity"
+			android:textSize="16sp"
+		/>
+
+		<EditText
+			android:id = "@+id/etQauntityChange"
+			android:layout_width="200dp"
+			android:inputType="number"
+			android:hint = "@string/a_number_please"
+		/>
+
+	</TableRow>
+
+	<TableRow>
+		<Button
+				android:id = "@+id/btnQuantityChangedOK"
+				android:layout_width="160dp"
+				android:layout_gravity="bottom"
+				android:text = "@string/btnOK"
+		/>
+
+		<Button
+				android:id = "@+id/btnQuantityChangedCancel"
+				android:layout_width="160dp"
+				android:layout_gravity="bottom"
+				android:text = "@string/btnCancel"
+		/>
+	</TableRow>
+
+</TableLayout>
