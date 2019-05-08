@@ -1,12 +1,9 @@
 package com.example.runoutnotifier
 
-import android.app.Activity
 import android.arch.persistence.room.Room
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
-import android.support.v7.widget.RecyclerView
-import android.support.design.widget.Snackbar
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
@@ -17,17 +14,13 @@ import com.example.runoutnotifier.model.MyItem
 import com.example.runoutnotifier.model.MyItemDatabse
 import kotlinx.android.synthetic.main.activity_item_list.*
 import kotlinx.android.synthetic.main.item_list.*
-import java.time.LocalDate
 import java.util.*
 import android.app.PendingIntent
-import android.content.Context.ALARM_SERVICE
 import android.app.AlarmManager
 import android.content.Context
-import android.icu.text.DateFormat
 import android.support.v7.widget.PopupMenu
 import android.widget.Toast
 import com.example.runoutnotifier.MyApp.Companion.db
-import com.example.runoutnotifier.model.ShowHiddenItemsTask
 import kotlin.system.exitProcess
 
 
@@ -196,7 +189,7 @@ MyItemDetailFragment.UpdateItemListener  {
                         c.set(Calendar.YEAR, dateParts[0].toInt())
                         c.set(Calendar.MONTH, dateParts[1].toInt()-1)
                         c.set(Calendar.DAY_OF_MONTH, dateParts[2].toInt())
-                        startAlarm(c)
+                        startAlarm(c, item)
                     }
                 }
             }.start()
@@ -210,15 +203,14 @@ MyItemDetailFragment.UpdateItemListener  {
 
         }
 
-        fun startAlarm(c : Calendar) {
+        fun startAlarm(c : Calendar, item : MyItem) {
             val alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
             val intent = Intent(this, AlertReceiver::class.java)
-            val pendingIntent = PendingIntent.getBroadcast(this, 1, intent, 0)
+            val pendingIntent = PendingIntent.getBroadcast(this, item.hashCode(), intent, 0)
 
             alarmManager.setExact(AlarmManager.RTC_WAKEUP, c.timeInMillis, pendingIntent)
 
-
-}
+        }
 
 
 }

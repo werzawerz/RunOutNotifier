@@ -18,7 +18,9 @@ class MyItem(
     @ColumnInfo(name = "Type")
     val type : Type,
     @ColumnInfo(name = "Hide")
-    var hide : Boolean
+    var hide : Boolean,
+    @ColumnInfo(name = "ConsumePerDay")
+    var consumePerDay : Double
 ) {
     enum class Type(value : Int) {
         Gramm(0),
@@ -59,6 +61,14 @@ class MyItem(
                 return Other
             }
         }
+    }
+
+    override fun hashCode(): Int {
+        var s = 0;
+        for(i in 0 until name.length ) {
+            s+= name[i].toInt()
+        }
+        return s
     }
 
 }

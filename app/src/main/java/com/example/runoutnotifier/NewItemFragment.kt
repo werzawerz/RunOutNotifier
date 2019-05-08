@@ -1,11 +1,11 @@
 package com.example.runoutnotifier
 
 import android.content.Context
-import android.icu.util.Calendar
 import android.os.Build
 import android.os.Bundle
 import android.support.annotation.RequiresApi
 import android.support.v4.app.DialogFragment
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,10 +14,12 @@ import android.widget.ArrayAdapter
 import com.example.runoutnotifier.model.MyItem
 import kotlinx.android.synthetic.main.new_item.*
 import java.util.*
+import java.util.concurrent.TimeUnit
 
 class NewItemFragment : DialogFragment(), DatePickerDialogFragment.DateListener {
 
     private lateinit var listener: NewItemListener
+    val selectedDate = Calendar.getInstance()
 
     override fun onAttach(context: Context?) {
         super.onAttach(context)
@@ -71,6 +73,12 @@ class NewItemFragment : DialogFragment(), DatePickerDialogFragment.DateListener 
             val dayStr = Calendar.getInstance().get(Calendar.DAY_OF_MONTH).toString()
             val currentTime = yearStr + "." + monthStr + "." + dayStr
 
+            val currentDate = Calendar.getInstance()
+            val difTime = selectedDate.timeInMillis - currentDate.timeInMillis
+            val difDate = TimeUnit.MILLISECONDS.toDays(Math.abs(difTime))
+
+            Log.d("dif", difDate.toString())
+
 
             val newItem = MyItem(
                 etItemName.text.toString(),
@@ -78,7 +86,8 @@ class NewItemFragment : DialogFragment(), DatePickerDialogFragment.DateListener 
                 enterDate.text.toString(),
                 etItemQuantity.text.toString().toDouble(),
                 type,
-                false
+                false,
+                etItemQuantity.text.toString().toDouble()/difDate
             )
 
             listener.onItemCreated(newItem)
@@ -105,5 +114,9 @@ class NewItemFragment : DialogFragment(), DatePickerDialogFragment.DateListener 
 
     override fun onDateSelected(date: String) {
         enterDate.text = date
+        val dateParts : List<String> = date.split('.')
+        selectedDate.set(java.util.Calendar.YEAR, dateParts[0].toInt())
+        selectedDate.set(java.util.Calendar.MONTH, dateParts[1].toInt()-1)
+        selectedDate.set(java.util.Calendar.DAY_OF_MONTH, dateParts[2].toInt())
     }
 }

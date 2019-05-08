@@ -1,10 +1,14 @@
 package com.example.runoutnotifier
 
 //import android.app.Fragment
+import android.app.AlarmManager
+import android.app.PendingIntent
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
+import android.support.v4.content.ContextCompat.getSystemService
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -15,6 +19,7 @@ import com.example.runoutnotifier.model.MyItemDatabse
 import kotlinx.android.synthetic.main.activity_item_detail.*
 import kotlinx.android.synthetic.main.item_detail.*
 import kotlinx.android.synthetic.main.item_row.*
+import java.util.*
 
 
 /**
@@ -29,6 +34,7 @@ class MyItemDetailFragment: Fragment(), DatePickerDialogFragment.DateListener, V
      * The MyItem content this fragment is presenting.
      */
     private var selectedItem: MyItem? = null
+    private lateinit var contextus : Context
 
     companion object {
         val ARG_ITEM_ID = "Item_Id"
@@ -38,6 +44,8 @@ class MyItemDetailFragment: Fragment(), DatePickerDialogFragment.DateListener, V
 
     override fun onAttach(context: Context?) {
         super.onAttach(context)
+
+        contextus = context!!;
 
         try {
             listener = if (targetFragment != null) {
@@ -75,15 +83,18 @@ class MyItemDetailFragment: Fragment(), DatePickerDialogFragment.DateListener, V
         btnChangeDueTime.setOnClickListener(this)
         val btnChangeQuantity = view.findViewById<Button>(R.id.btnChangeQuantity)
         btnChangeQuantity.setOnClickListener(this)
+        val btnRebuy = view.findViewById<Button>(R.id.btnRebuy)
+        btnRebuy.setOnClickListener(this)
     }
 
     override fun onClick(v: View?) {
         when(v?.id) {
             R.id.btnChangeDueTime -> {
-                Log.d("ChangeDueTime", "megnyomtad")
                 val datePicker = DatePickerDialogFragment()
                 datePicker.setTargetFragment(this, 0)
                 datePicker.show(fragmentManager, "datepicker")
+
+
             }
             R.id.btnChangeQuantity -> {
                 val quantityChanger = QuantityChangerFragment()
@@ -91,7 +102,10 @@ class MyItemDetailFragment: Fragment(), DatePickerDialogFragment.DateListener, V
                 quantityChanger.show(fragmentManager, "dab")
             }
             R.id.btnRebuy -> {
-
+                Log.d("ChangeDueTime", "megnyomtad")
+                val quantityChanger = QuantityChangerFragment()
+                quantityChanger.setTargetFragment(this, 0)
+                quantityChanger.show(fragmentManager, "dab")
             }
         }
     }
@@ -102,6 +116,14 @@ class MyItemDetailFragment: Fragment(), DatePickerDialogFragment.DateListener, V
         selectedItem?.dueDate = date;
         listener.onItemUpdated(selectedItem)
 
+        val dateParts : List<String> = date.split('.')
+        val c = Calendar.getInstance()
+        c.set(Calendar.YEAR, dateParts[0].toInt())
+        c.set(Calendar.MONTH, dateParts[1].toInt()-1)
+        c.set(Calendar.DAY_OF_MONTH, dateParts[2].toInt())
+
+        startAlarm(c,selectedItem!!)
+
     }
 
     override fun onQuantityChanged(d: Double) {
@@ -109,6 +131,15 @@ class MyItemDetailFragment: Fragment(), DatePickerDialogFragment.DateListener, V
         tvDetailQuantity.text = auxs
         selectedItem?.quantity = d;
         listener.onItemUpdated(selectedItem)
+    }
+
+    fun startAlarm(c : Calendar, item : MyItem) {
+        val alarmManager = contextus.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+        val intent = Intent(contextus, AlertReceiver::class.java)
+        val pendingIntent = PendingIntent.getBroadcast(contextus, selectedItem.hashCode(), intent, 0)
+
+        alarmManager.setExact(AlarmManager.RTC_WAKEUP, c.timeInMillis, pendingIntent)
+
     }
 
     interface UpdateItemListener {
