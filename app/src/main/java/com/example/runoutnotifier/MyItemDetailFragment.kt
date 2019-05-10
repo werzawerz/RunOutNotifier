@@ -33,7 +33,7 @@ class MyItemDetailFragment: Fragment(), DatePickerDialogFragment.DateListener, V
     /**
      * The MyItem content this fragment is presenting.
      */
-    private var selectedItem: MyItem? = null
+    private lateinit var selectedItem: MyItem
     private lateinit var contextus : Context
 
     companion object {
@@ -102,8 +102,8 @@ class MyItemDetailFragment: Fragment(), DatePickerDialogFragment.DateListener, V
                 quantityChanger.show(fragmentManager, "dab")
             }
             R.id.btnRebuy -> {
-                Log.d("ChangeDueTime", "megnyomtad")
                 val quantityChanger = QuantityChangerFragment()
+                quantityChanger.rebuy = true
                 quantityChanger.setTargetFragment(this, 0)
                 quantityChanger.show(fragmentManager, "dab")
             }
@@ -126,10 +126,32 @@ class MyItemDetailFragment: Fragment(), DatePickerDialogFragment.DateListener, V
 
     }
 
-    override fun onQuantityChanged(d: Double) {
+    override fun onQuantityChanged(d: Double, rebuy : Boolean) {
         val auxs  = "You have ${d.toString()} ${selectedItem?.type.toString()}"
         tvDetailQuantity.text = auxs
-        selectedItem?.quantity = d;
+        selectedItem?.quantity = d
+
+        if(rebuy) {
+            var yearStr = Calendar.getInstance().get(Calendar.YEAR).toString()
+            var monthStr = Calendar.getInstance().get(Calendar.MONTH).toString()
+            var dayStr = Calendar.getInstance().get(Calendar.DAY_OF_MONTH).toString()
+            var currentTime = yearStr + "." + monthStr + "." + dayStr
+            selectedItem?.purchaseDate = currentTime
+
+            val calend = Calendar.getInstance()
+            calend.add(Calendar.DATE, (d / selectedItem.consumePerDay).toInt())
+            yearStr = calend.get(Calendar.YEAR).toString()
+            monthStr = (calend.get(Calendar.MONTH)+1).toString()
+            dayStr = calend.get(Calendar.DAY_OF_MONTH).toString()
+            val dueTime = yearStr + "." + monthStr + "." + dayStr
+            selectedItem?.dueDate = dueTime
+            tvDetailDueDate.text = dueTime
+
+            startAlarm(calend, selectedItem)
+        }
+
+
+
         listener.onItemUpdated(selectedItem)
     }
 

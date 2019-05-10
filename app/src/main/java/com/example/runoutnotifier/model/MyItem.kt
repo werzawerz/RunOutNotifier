@@ -10,7 +10,7 @@ class MyItem(
     @PrimaryKey
     val name : String,
     @ColumnInfo(name = "PurchaseDate")
-    val purchaseDate : String,
+    var purchaseDate : String,
     @ColumnInfo(name = "DueDate")
     var dueDate : String? = null,
     @ColumnInfo(name = "Qunatity")

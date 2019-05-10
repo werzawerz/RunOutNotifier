@@ -11,9 +11,10 @@ import com.example.runoutnotifier.ItemDetailActivity.Companion.selectedItem
 import kotlinx.android.synthetic.main.item_detail.*
 import kotlinx.android.synthetic.main.quantity_changer.*
 
-class QuantityChangerFragment : DialogFragment() {
+class QuantityChangerFragment : DialogFragment()  {
 
     private lateinit var listener: QuantityChangedListener
+    var rebuy = false
 
     override fun onAttach(context: Context?) {
         super.onAttach(context)
@@ -38,7 +39,7 @@ class QuantityChangerFragment : DialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
         btnQuantityChangedOK.setOnClickListener {
-            listener.onQuantityChanged(etQauntityChange.text.toString().toDouble())
+            listener.onQuantityChanged(etQauntityChange.text.toString().toDouble(), rebuy)
             dismiss()
         }
         btnQuantityChangedCancel.setOnClickListener() {
@@ -48,6 +49,6 @@ class QuantityChangerFragment : DialogFragment() {
 
 
     interface QuantityChangedListener {
-        fun onQuantityChanged(d : Double)
+        fun onQuantityChanged(d : Double, rebuy: Boolean)
     }
 }
