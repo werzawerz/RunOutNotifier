@@ -46,10 +46,13 @@ class SimpleItemRecyclerViewAdapter(
         parent.tvName.text = item.name
         parent.tvType.text = item.type.toString()
 
-        var dateParts : List<String> = item.dueDate!!.split('.')
-        var dueDate = Date(dateParts[0].toInt(), dateParts[1].toInt(), dateParts[2].toInt())
-        if(dueDate < Calendar.getInstance().time) {
-            rootView.setBackgroundColor(R.color.DarkRed)
+        val dateParts : List<String> = item.dueDate!!.split('.')
+        val c = Calendar.getInstance()
+        c.set(Calendar.YEAR, dateParts[0].toInt())
+        c.set(Calendar.MONTH, dateParts[1].toInt()-1)
+        c.set(Calendar.DAY_OF_MONTH, dateParts[2].toInt())
+        if(c.time < Calendar.getInstance().time) {
+            rootView.setBackgroundResource(R.color.Red)
         }
 
     }
@@ -103,6 +106,7 @@ class SimpleItemRecyclerViewAdapter(
                 item?.let { item -> itemClickListener.onLongClick(item!!, view) }
                 true
             }
+
         }
     }
 
